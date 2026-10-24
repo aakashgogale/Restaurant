@@ -1,0 +1,435 @@
+@import "tailwindcss";
+
+/* =========================================================
+   Design tokens
+   Four colours + neutrals. Brass-ink and terracotta-ink are
+   darker text-only variants that pass AA on ivory.
+   ========================================================= */
+:root {
+  --navy: #0e1a2b;
+  --navy-deep: #09121f;
+  --ivory: #f4eee2;
+  --brass: #b08d57;
+  --brass-ink: #7e6034;
+  --terracotta: #b5532d;
+  --terracotta-ink: #9a4322;
+
+  --font-serif: "Cormorant Garamond", "IBM Plex Sans Arabic", Georgia, serif;
+  --font-sans: "Manrope Variable", "IBM Plex Sans Arabic", system-ui, sans-serif;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --container: 1200px;
+  --gutter: 24px;
+  --nav-h: 72px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --gutter: 40px;
+  }
+}
+
+@theme inline {
+  --color-navy: var(--navy);
+  --color-navy-deep: var(--navy-deep);
+  --color-ivory: var(--ivory);
+  --color-brass: var(--brass);
+  --color-brass-ink: var(--brass-ink);
+  --color-terracotta: var(--terracotta);
+  --color-terracotta-ink: var(--terracotta-ink);
+  --font-serif: var(--font-serif);
+  --font-sans: var(--font-sans);
+}
+
+/* Custom CSS lives in layers so Tailwind utilities can always override it. */
+@layer base {
+/* ---------- Base ---------- */
+html {
+  -webkit-text-size-adjust: 100%;
+  background: var(--navy);
+}
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--navy);
+  background: var(--ivory);
+  -webkit-font-smoothing: antialiased;
+  font-variant-numeric: lining-nums;
+  overflow-x: clip;
+}
+img {
+  max-width: 100%;
+  display: block;
+}
+::selection {
+  background: var(--brass);
+  color: var(--navy);
+}
+:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 3px;
+}
+
+/* Subtle film grain, static (2.5% opacity) */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+}
+
+@layer components {
+/* ---------- Layout ---------- */
+.container-x {
+  width: 100%;
+  max-width: calc(var(--container) + var(--gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+.section {
+  padding-block: 112px;
+}
+@media (min-width: 768px) {
+  .section {
+    padding-block: 160px;
+  }
+}
+
+/* Section rhythm: each section declares its ground, and the
+   tokens below make text, hairlines and buttons follow it. */
+.sec-dark {
+  --ink: var(--ivory);
+  --ground: var(--navy);
+  --muted: rgb(244 238 226 / 0.68);
+  --accent: var(--brass);
+  --hair: rgb(176 141 87 / 0.3);
+  background: var(--navy);
+  color: var(--ivory);
+}
+.sec-deep {
+  --ink: var(--ivory);
+  --ground: var(--navy-deep);
+  --muted: rgb(244 238 226 / 0.6);
+  --accent: var(--brass);
+  --hair: rgb(176 141 87 / 0.24);
+  background: var(--navy-deep);
+  color: var(--ivory);
+}
+.sec-light {
+  --ink: var(--navy);
+  --ground: var(--ivory);
+  --muted: rgb(14 26 43 / 0.7);
+  --accent: var(--brass-ink);
+  --hair: rgb(126 96 52 / 0.28);
+  background: var(--ivory);
+  color: var(--navy);
+}
+.text-muted {
+  color: var(--muted);
+}
+.text-accent {
+  color: var(--accent);
+}
+.border-hair {
+  border-color: var(--hair);
+}
+.bg-hair {
+  background: var(--hair);
+}
+
+/* ---------- Type scale ---------- */
+.t-display {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-size: clamp(3rem, 1.4rem + 6.4vw, 7.5rem);
+  line-height: 0.94;
+  letter-spacing: -0.025em;
+}
+.t-h2 {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-size: clamp(2.5rem, 1.6rem + 3.6vw, 4.75rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.t-h3 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(1.5rem, 1.25rem + 0.8vw, 2rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+.t-quote {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(1.75rem, 1.3rem + 1.8vw, 3rem);
+  line-height: 1.18;
+  letter-spacing: -0.01em;
+}
+.t-num {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-size: clamp(3.5rem, 2.5rem + 3.4vw, 6rem);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  font-variant-numeric: lining-nums;
+}
+.t-label {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+.t-body {
+  font-size: 16px;
+  line-height: 1.75;
+}
+@media (min-width: 768px) {
+  .t-label {
+    font-size: 12px;
+  }
+  .t-body {
+    font-size: 17px;
+  }
+}
+[dir="rtl"] .t-display,
+[dir="rtl"] .t-h2,
+[dir="rtl"] .t-h3,
+[dir="rtl"] .t-quote {
+  letter-spacing: 0;
+  line-height: 1.3;
+}
+[dir="rtl"] .t-label {
+  letter-spacing: 0;
+}
+
+/* Line reveal wrappers (GSAP animates .line-inner) */
+.line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.1em;
+  margin-bottom: -0.1em;
+}
+.line-inner {
+  display: block;
+}
+
+/* ---------- Buttons: understated, fill slides in on hover ---------- */
+.btn {
+  --btn-bg: transparent;
+  --btn-fg: var(--ink);
+  --btn-bd: color-mix(in srgb, var(--ink) 40%, transparent);
+  --btn-fill: var(--ink);
+  --btn-fill-fg: var(--ground);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 52px;
+  padding: 0 28px;
+  border: 1px solid var(--btn-bd);
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  font: 600 12px/1 var(--font-sans);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 0.6s var(--ease), border-color 0.6s var(--ease);
+}
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--btn-fill);
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform 0.7s var(--ease);
+}
+.btn:hover::before,
+.btn:focus-visible::before {
+  transform: scaleX(1);
+  transform-origin: left center;
+}
+[dir="rtl"] .btn::before {
+  transform-origin: left center;
+}
+[dir="rtl"] .btn:hover::before,
+[dir="rtl"] .btn:focus-visible::before {
+  transform-origin: right center;
+}
+.btn:hover,
+.btn:focus-visible {
+  color: var(--btn-fill-fg);
+  border-color: var(--btn-fill);
+}
+[dir="rtl"] .btn {
+  letter-spacing: 0;
+}
+.btn-sm {
+  min-height: 44px;
+  padding: 0 20px;
+}
+.btn-solid {
+  --btn-bg: var(--brass);
+  --btn-fg: var(--navy);
+  --btn-bd: var(--brass);
+  --btn-fill: var(--ivory);
+  --btn-fill-fg: var(--navy);
+}
+.sec-light .btn-solid {
+  --btn-bg: var(--navy);
+  --btn-fg: var(--ivory);
+  --btn-bd: var(--navy);
+  --btn-fill: var(--brass-ink);
+  --btn-fill-fg: var(--ivory);
+}
+.btn-icon {
+  min-height: 48px;
+  width: 48px;
+  padding: 0;
+}
+
+/* Link with an underline that draws on hover */
+.link {
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+}
+.link::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: -3px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform 0.6s var(--ease);
+}
+.link:hover::after,
+.link:focus-visible::after,
+.link[aria-current="true"]::after {
+  transform: scaleX(1);
+  transform-origin: left center;
+}
+.link-under::after {
+  transform: scaleX(1);
+  opacity: 0.4;
+}
+.link-under:hover::after {
+  opacity: 1;
+}
+
+/* ---------- Images ---------- */
+.img-frame {
+  position: absolute;
+  inset: 0;
+  display: block;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--ink, #0e1a2b) 8%, transparent);
+}
+.img-ph,
+.img-main {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* One colour grade for every photograph: warm, slightly desaturated */
+.img-main {
+  filter: saturate(0.8) contrast(1.03) sepia(0.08);
+  opacity: 0;
+  transition: opacity 0.9s var(--ease), transform 1.2s var(--ease);
+}
+.img-ph {
+  filter: blur(18px) saturate(0.8) sepia(0.08);
+  transform: scale(1.1);
+}
+.img-main.is-loaded {
+  opacity: 1;
+}
+.zoom:hover .img-main,
+.zoom:focus-visible .img-main {
+  transform: scale(1.04);
+}
+
+/* Horizontal track whose first card lines up with the container edge */
+.track-edge {
+  --edge: max(var(--gutter), calc((100% - var(--container)) / 2));
+  padding-inline: var(--edge);
+  scroll-padding-inline: var(--edge);
+}
+
+/* ---------- Misc ---------- */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.leader {
+  flex: 1 1 auto;
+  min-width: 24px;
+  border-bottom: 1px dotted color-mix(in srgb, var(--ink) 35%, transparent);
+  transform: translateY(-5px);
+}
+.fade-up {
+  animation: fade-up 0.7s var(--ease) both;
+}
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+.skip-link {
+  position: fixed;
+  top: 12px;
+  inset-inline-start: 12px;
+  z-index: 200;
+  transform: translateY(-200%);
+}
+.skip-link:focus {
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+}
